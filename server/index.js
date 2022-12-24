@@ -11,8 +11,8 @@ app.use(express.json())
 app.use(cors())
 
 //---This will reset and reseed your db ===>{force: true}---//
-// sequelize.sync()
-// .then(() => {
+sequelize.sync()
+.then(() => {
     app.listen(SERVER_PORT, console.log(`We are live in Soul Society ${SERVER_PORT}!`))
-// })
-// .catch(err => console.log(err))
+})
+.catch(err => console.log(err))

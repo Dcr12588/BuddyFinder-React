@@ -3,7 +3,6 @@ import './yourBuddies.css'
 
 const YourBuddies = () => {
     return (
-
         <div>Your Buddies</div>
     )
 }
