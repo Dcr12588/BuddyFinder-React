@@ -55,7 +55,7 @@ if(localData){
 }
 
     const [userId, setUserId] = useState(initialUserId)
-    const [token, steToken] = useState(initialToken)
+    const [token, setToken] = useState(initialToken)
     const [username, setUsername] = useState(initialUsername)
 
     const logout = useCallback(() => {
@@ -68,5 +68,47 @@ if(localData){
         localStorage.removeItem('expTime')
         localStorage.removeItem('userId')
         localStorage.removeItem('username')
+
+        if(logoutTimer){
+            clearTimeout(logoutTimer)
+        }
+    
+    }, [])
+
+    const login = (token, exp, userId, username) => {
+        setUserId(+userId)
+        setToken(token)
+        setUsername(username)
+        console.log(token, exp, username,userId)
+        localStorage.setItem('token', token)        
+        localStorage.setItem('userId', +userId)        
+        localStorage.setItem('exp', exp)        
+        localStorage.setItem('username', username)
+        console.log(localStorage.getItem('token'))
+        const remainingTime = calculateRemainingTime(exp)
+        
+        logoutTimer = setTimeout(logout, remainingTime)
+    }
+
+    useEffect(() => {
+        if(localData) {
+            console.log(localData.duration)
+            logoutTimer = setTimeout(logout, localData.duration)
+        }
     })
+
+    const contextValue = {
+        token, 
+        userId, 
+        username,
+        login,
+        logout
+    }
+    return (
+        <AuthContext.Provider value={contextValue}>
+            {props.children}
+        </AuthContext.Provider>
+    )
 }
+
+export default AuthContext;
